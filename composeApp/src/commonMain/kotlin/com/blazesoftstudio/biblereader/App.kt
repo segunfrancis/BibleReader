@@ -1,88 +1,78 @@
 package com.blazesoftstudio.biblereader
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderFrostedOverlay
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderGlowCtaBackground
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderInputField
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderPrimaryButton
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderScriptureRow
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderSecondaryButton
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderSpacing
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderTertiaryButton
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.blazesoftstudio.biblereader.core.data.OnboardingStateStore
+import com.blazesoftstudio.biblereader.core.navigation.HydroHeroNavigation
 import com.blazesoftstudio.biblereader.designsystem.BibleReaderTheme
-import com.blazesoftstudio.biblereader.designsystem.BibleReaderVerseOfDayCard
+import com.blazesoftstudio.biblereader.feature.home.HomeScreen
+import com.blazesoftstudio.biblereader.feature.onboarding.OnboardingEffect
+import com.blazesoftstudio.biblereader.feature.onboarding.OnboardingScreen
+import com.blazesoftstudio.biblereader.feature.onboarding.OnboardingViewModel
+import com.blazesoftstudio.biblereader.feature.onboarding.TranslationSelectionScreen
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-@Preview
 fun App() {
     BibleReaderTheme {
-        var note by remember { mutableStateOf("") }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.surface)
-                .safeContentPadding()
-                .fillMaxSize()
-                .padding(horizontal = BibleReaderSpacing.editorialInset, vertical = BibleReaderSpacing.xl),
-            verticalArrangement = Arrangement.spacedBy(BibleReaderSpacing.lg),
+        val onboardingStateStore = koinInject<OnboardingStateStore>()
+        val viewModel = koinViewModel<OnboardingViewModel>()
+        val uiState by viewModel.uiState.collectAsState()
+        val onboardingComplete by onboardingStateStore.onboardingComplete.collectAsState(initial = null)
+        val navController = rememberNavController()
+
+        LaunchedEffect(Unit) {
+            viewModel.effects.collect { effect ->
+                when (effect) {
+                    OnboardingEffect.NavigateToTranslations -> navController.navigate(HydroHeroNavigation.TranslationSelection)
+                    OnboardingEffect.NavigateToHome -> {
+                        navController.navigate(HydroHeroNavigation.Home) {
+                            popUpTo<HydroHeroNavigation.Onboarding> { inclusive = true }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (onboardingComplete == null) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+            return@BibleReaderTheme
+        }
+
+        NavHost(
+            navController = navController,
+            startDestination = if (onboardingComplete == true) HydroHeroNavigation.Home else HydroHeroNavigation.Onboarding,
         ) {
-            Text("Psalms", style = MaterialTheme.typography.displayLarge)
-            Text("Chapter 23", style = MaterialTheme.typography.headlineMedium)
+            composable<HydroHeroNavigation.Onboarding> {
+                OnboardingScreen(onGetStarted = viewModel::onGetStartedTapped)
+            }
 
-            BibleReaderVerseOfDayCard(
-                title = "Verse of the Day",
-                verse = "The Lord is my shepherd; I shall not want.",
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            BibleReaderScriptureRow(
-                verseNumber = 1,
-                scriptureText = "The Lord is my shepherd; I shall not want.",
-                isActive = true,
-            )
-            BibleReaderScriptureRow(
-                verseNumber = 2,
-                scriptureText = "He maketh me to lie down in green pastures: he leadeth me beside the still waters.",
-                isActive = false,
-            )
-
-            BibleReaderInputField(
-                value = note,
-                onValueChange = { note = it },
-                label = "Meditation note",
-            )
-
-            BibleReaderGlowCtaBackground {
-                BibleReaderPrimaryButton(
-                    text = "Continue Reading",
-                    onClick = {},
-                    modifier = Modifier.fillMaxWidth(),
+            composable<HydroHeroNavigation.TranslationSelection> {
+                LaunchedEffect(Unit) {
+                    viewModel.loadTranslations()
+                }
+                TranslationSelectionScreen(
+                    uiState = uiState,
+                    onTranslationToggle = viewModel::onToggleTranslation,
+                    onDownloadAndContinue = viewModel::onDownloadAndContinueTapped,
                 )
             }
 
-            BibleReaderSecondaryButton("Bookmark", onClick = {}, modifier = Modifier.align(Alignment.Start))
-            BibleReaderTertiaryButton("Cancel", onClick = {}, modifier = Modifier.align(Alignment.Start))
-
-            Spacer(Modifier.height(BibleReaderSpacing.sm))
-            BibleReaderFrostedOverlay {
-                Text("Floating Scripture Tools", style = MaterialTheme.typography.labelMedium)
+            composable<HydroHeroNavigation.Home> {
+                HomeScreen()
             }
         }
     }
