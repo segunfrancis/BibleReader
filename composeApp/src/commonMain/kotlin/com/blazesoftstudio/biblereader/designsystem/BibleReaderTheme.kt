@@ -11,7 +11,7 @@ fun BibleReaderTheme(
 ) {
     MaterialTheme(
         colorScheme = if (darkTheme) bibleReaderDarkColorScheme else bibleReaderLightColorScheme,
-        typography = bibleReaderTypography,
+        typography = bibleReaderTypography(),
         shapes = bibleReaderShapes,
         content = content,
     )
