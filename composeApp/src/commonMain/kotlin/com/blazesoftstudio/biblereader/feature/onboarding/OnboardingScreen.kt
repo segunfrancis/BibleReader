@@ -20,10 +20,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -33,23 +31,26 @@ import com.blazesoftstudio.biblereader.designsystem.BibleReaderPrimaryButton
 fun OnboardingScreen(
     onGetStarted: () -> Unit,
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
             model = "https://images.unsplash.com/photo-1504052434569-70ad5836ab65",
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
         )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color(0xCCF7F2E7), Color(0xE5F0ECE2)),
+                        colors = listOf(
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.82f),
+                            MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.9f),
+                        ),
                     ),
                 ),
         )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -92,7 +93,9 @@ private fun OnboardingFeatureCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.6f)),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.72f),
+        ),
     ) {
         androidx.compose.material3.ListItem(
             headlineContent = { Text(title, fontWeight = FontWeight.SemiBold) },

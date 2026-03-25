@@ -100,7 +100,7 @@ private fun TranslationCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF4F4F1)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
     ) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
@@ -108,10 +108,13 @@ private fun TranslationCard(
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(if (isSelected) Color(0xFF5E6761) else Color.Transparent)
+                        .background(if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent)
                         .padding(5.dp),
                 ) {
-                    Text(if (isSelected) "✓" else "○", color = if (isSelected) Color.White else Color(0xFF5E6761))
+                    Text(
+                        if (isSelected) "✓" else "○",
+                        color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
+                    )
                 }
             }
             Text(translation.abbreviation, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)

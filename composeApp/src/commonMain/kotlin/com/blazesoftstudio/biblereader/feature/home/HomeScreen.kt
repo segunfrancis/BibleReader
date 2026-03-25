@@ -35,7 +35,7 @@ fun HomeScreen() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F2))
+            .background(MaterialTheme.colorScheme.surface)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
@@ -43,11 +43,13 @@ fun HomeScreen() {
             Text("Bible Reader", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
         }
         item {
-            Card(shape = RoundedCornerShape(14.dp)) {
+            Card(shape = RoundedCornerShape(14.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
                 AsyncImage(
                     model = "https://images.unsplash.com/photo-1472141521881-95d0e87e2e39",
                     contentDescription = null,
-                    modifier = Modifier.height(230.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .height(230.dp)
+                        .fillMaxWidth(),
                 )
                 Text(
                     "\"The Lord is my shepherd: I shall not want.\"",
@@ -58,9 +60,11 @@ fun HomeScreen() {
             }
         }
         item {
-            Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFD4DDD3))) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
@@ -84,7 +88,7 @@ fun HomeScreen() {
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 QuickActionCard("Settings", Icons.Outlined.Settings, Modifier.weight(1f))
-                QuickActionCard("Archive", Icons.Outlined.MenuBook, Modifier.weight(1f), Color(0xFFC9EEDA))
+                QuickActionCard("Archive", Icons.Outlined.MenuBook, Modifier.weight(1f), MaterialTheme.colorScheme.tertiaryContainer)
             }
         }
     }
@@ -95,7 +99,7 @@ private fun QuickActionCard(
     title: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     modifier: Modifier,
-    color: Color = Color(0xFFE7E8E2),
+    color: Color = MaterialTheme.colorScheme.surfaceContainer,
 ) {
     Card(modifier = modifier.height(96.dp), colors = CardDefaults.cardColors(containerColor = color)) {
         Column(
