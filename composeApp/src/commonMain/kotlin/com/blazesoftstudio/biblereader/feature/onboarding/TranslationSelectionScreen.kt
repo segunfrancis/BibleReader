@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.blazesoftstudio.biblereader.core.data.BibleTranslation
+import com.blazesoftstudio.biblereader.designsystem.BibleReaderPrimaryButton
 import com.blazesoftstudio.biblereader.feature.onboarding.model.OnboardingUiState
 
 @Composable
@@ -78,18 +77,16 @@ fun TranslationSelectionScreen(
             }
         }
 
-        Button(
-            onClick = onDownloadAndContinue,
+        BibleReaderPrimaryButton(
+            text = if (uiState.downloadingTranslations) "Downloading..." else "Download & Continue",
+            onClick = {
+                if (uiState.selectedIds.isNotEmpty() && !uiState.downloadingTranslations) onDownloadAndContinue()
+            },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(20.dp)
                 .fillMaxWidth(),
-            enabled = uiState.selectedIds.isNotEmpty() && !uiState.downloadingTranslations,
-            shape = RoundedCornerShape(28.dp),
-            contentPadding = PaddingValues(vertical = 14.dp),
-        ) {
-            Text(if (uiState.downloadingTranslations) "Downloading..." else "Download & Continue")
-        }
+        )
     }
 }
 
