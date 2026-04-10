@@ -49,9 +49,10 @@ class OnboardingViewModel(
                     }
                 }
                 .onFailure {
+                    println("OnFailure: ${it.message}")
                     val fallback = sampleTranslations
-                    _uiState.update {
-                        it.copy(
+                    _uiState.update { state ->
+                        state.copy(
                             loadingTranslations = false,
                             translations = fallback,
                             selectedIds = setOf(fallback.first().id),
@@ -88,8 +89,56 @@ sealed interface OnboardingEffect {
 }
 
 private val sampleTranslations = listOf(
-    BibleTranslation("esv", "English", "ESV", "English Standard Version", 4.2),
-    BibleTranslation("kjv", "Classical", "KJV", "King James Version", 3.8),
-    BibleTranslation("niv", "Modern", "NIV", "New International Version", 4.5),
-    BibleTranslation("nasb", "Literal", "NASB", "New American Standard Bible", 4.0),
+    BibleTranslation(
+        id = "esv",
+        language = "English",
+        website = "ESV",
+        name = "English Standard Version",
+        shortName = "ESV",
+        licenseUrl = "",
+        numberOfBooks = 90,
+        totalNumberOfChapters = 1293,
+        totalNumberOfVerses = 529698,
+        listOfBooksApiLink = "",
+        availableFormats = listOf()
+    ),
+    BibleTranslation(
+        id = "kjv",
+        language = "Classical",
+        website = "KJV",
+        name = "King James Version",
+        shortName = "KJV",
+        licenseUrl = "",
+        numberOfBooks = 90,
+        totalNumberOfChapters = 1293,
+        totalNumberOfVerses = 529698,
+        listOfBooksApiLink = "",
+        availableFormats = listOf()
+    ),
+    BibleTranslation(
+        id = "niv",
+        language = "Modern",
+        website = "NIV",
+        name = "New International Version",
+        shortName = "NIV",
+        licenseUrl = "",
+        numberOfBooks = 90,
+        totalNumberOfChapters = 1293,
+        totalNumberOfVerses = 529698,
+        listOfBooksApiLink = "",
+        availableFormats = listOf()
+    ),
+    BibleTranslation(
+        id = "nasb",
+        language = "Literal",
+        website = "NASB",
+        name = "New American Standard Bible",
+        shortName = "NASB",
+        licenseUrl = "",
+        numberOfBooks = 90,
+        totalNumberOfChapters = 1293,
+        totalNumberOfVerses = 529698,
+        listOfBooksApiLink = "",
+        availableFormats = listOf()
+    )
 )

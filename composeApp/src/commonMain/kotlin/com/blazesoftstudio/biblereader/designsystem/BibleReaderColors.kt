@@ -48,7 +48,7 @@ val bibleReaderLightColorScheme = lightColorScheme(
 )
 
 // Dark scheme (seed: #4A5D50, neutral variant)
-val DarkPrimary = Color(0xFF717972)
+val DarkPrimary = Color(0xFFBECABF)
 val DarkSecondary = Color(0xFF757874)
 val DarkTertiary = Color(0xFF5E7E70)
 val DarkNeutral = Color(0xFF787775)

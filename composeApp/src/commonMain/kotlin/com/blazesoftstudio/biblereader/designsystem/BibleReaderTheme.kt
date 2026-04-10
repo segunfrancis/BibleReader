@@ -6,12 +6,11 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun BibleReaderTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
     MaterialTheme(
-        colorScheme = if (darkTheme) bibleReaderDarkColorScheme else bibleReaderLightColorScheme,
-        typography = bibleReaderTypography(),
+        colorScheme = if (isSystemInDarkTheme()) bibleReaderDarkColorScheme else bibleReaderLightColorScheme,
+        typography = BibleReaderTypography,
         shapes = bibleReaderShapes,
         content = content,
     )

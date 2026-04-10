@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +28,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 
@@ -34,15 +36,18 @@ import androidx.compose.ui.unit.dp
 fun BibleReaderPrimaryButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Button(
         onClick = onClick,
-        modifier = modifier.clip(fullPillShape),
+        modifier = modifier.clip(fullPillShape).height(56.dp),
         shape = fullPillShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
         ),
-        contentPadding = PaddingValues(horizontal = BibleReaderSpacing.xl, vertical = BibleReaderSpacing.md),
+        contentPadding = PaddingValues(
+            horizontal = BibleReaderSpacing.xl,
+            vertical = BibleReaderSpacing.md
+        ),
     ) {
-        Text(text = text)
+        Text(text = text, style = MaterialTheme.typography.labelLarge)
     }
 }
 
@@ -53,7 +58,10 @@ fun BibleReaderGlowCtaBackground(modifier: Modifier = Modifier, content: @Compos
             .clip(fullPillShape)
             .background(
                 brush = Brush.linearGradient(
-                    listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primaryContainer),
+                    listOf(
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.primaryContainer
+                    ),
                 ),
             )
             .padding(BibleReaderSpacing.xs),
@@ -66,7 +74,7 @@ fun BibleReaderGlowCtaBackground(modifier: Modifier = Modifier, content: @Compos
 fun BibleReaderSecondaryButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.height(56.dp),
         shape = fullPillShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -79,7 +87,7 @@ fun BibleReaderSecondaryButton(text: String, onClick: () -> Unit, modifier: Modi
 fun BibleReaderTertiaryButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     TextButton(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.height(56.dp),
         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary),
     ) { Text(text = text) }
 }
@@ -173,7 +181,19 @@ fun BibleReaderAmbientFabShadow(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .blur(24.dp)
-            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.06f), shape = CircleShape)
+            .background(
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.06f),
+                shape = CircleShape
+            )
             .alpha(0.8f),
+    )
+}
+
+@Composable
+fun PrimaryText(modifier: Modifier = Modifier, style: TextStyle, text: String) {
+    Text(
+        text = text,
+        modifier = modifier,
+        style = style.copy(color = MaterialTheme.colorScheme.primary)
     )
 }
